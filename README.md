@@ -1,6 +1,6 @@
 # Currículo Online
 
-![Currículo Online](
+
 ![Untitled video - Made with Clipchamp](https://github.com/luciomotta/Curriculo-Online-/assets/83682095/9a0b1dfa-6647-49b3-9fe8-1ac2ae29ecb2)) 
 ## Sobre o Projeto
 
