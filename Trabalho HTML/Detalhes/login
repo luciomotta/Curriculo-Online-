@@ -1,0 +1,43 @@
+<?php
+// Verifica se o formulário de login foi enviado
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Obtém os dados do formulário
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+    // Conecta ao banco de dados SQLite ou cria um novo se não existir
+    $db = new SQLite3('database.db');
+
+    // Verifica se a tabela "users" existe, caso contrário, a cria
+    $tableExists = $db->querySingle("SELECT name FROM sqlite_master WHERE type='table' AND name='users'");
+    if (!$tableExists) {
+        $createTableQuery = "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT)";
+        $db->exec($createTableQuery);
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['formType']) && $_POST['formType'] === 'login') {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        // Verificar as credenciais de login aqui (por exemplo, consultando o banco de dados)
+        // Verifica se o usuário existe no banco de dados
+        $query = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+        $result = $db->query($query);
+        
+        // Exemplo de verificação simples apenas para fins ilustrativos
+        if ($result->fetchArray()) {
+            // Credenciais corretas, redirecionar para Index.php
+            header('Location: Index.html');
+            exit();
+        } else {
+            // Credenciais incorretas, exibir mensagem de erro e limpar campos de entrada
+            echo '<script>alert("Credenciais de login incorretas. Por favor, tente novamente.");</script>';
+            echo '<script>document.getElementById("email").value = "";</script>';
+            echo '<script>document.getElementById("password").value = "";</script>';
+        }
+    }
+    
+    // Fecha a conexão com o banco de dados
+    $db->close();
+}
+?>
